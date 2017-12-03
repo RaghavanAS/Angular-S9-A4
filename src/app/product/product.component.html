@@ -1,0 +1,108 @@
+<!-- Template driven product form -->
+<div class="container">
+<h2>Product form</h2>
+ 
+  <form class="form-horizontal" (ngSubmit)="saveDetails(form1.value)" #form1="ngForm" novalidate autocomplete="off">
+    <div ngModelGroup="productData" #productData="ngModelGroup">
+      <div class="form-group">
+        <label class="control-label col-sm-2" for="productName">Product Name:</label>
+         <div class="col-sm-10">
+            <input type="text"
+            [(ngModel)]="product.productName" 
+            class="form-control" 
+            id="productName" 
+            placeholder="Enter Product Name" 
+            name="productName" pattern="^[a-zA-Z]*$" maxlength="15" minlength="2"
+            #productName="ngModel" required>
+              <div class="alert alert-danger" 
+                *ngIf="!productName.valid && productName.touched">
+                <div *ngIf="productName.errors.required"> 
+                Name is required.
+                </div>
+                <div *ngIf="productName.errors.minlength">
+                Please enter atleast 2 characeters.
+                </div>
+                 <div *ngIf="productName.errors.pattern">
+                  Please enter alphabets.
+                  </div>
+              </div>
+        </div>
+      </div>
+    <div class="form-group">
+      <label class="control-label col-sm-2" for="productCode">Product Code:</label>
+      <div class="col-sm-10">          
+        <input type="text" 
+        [(ngModel)]="product.productCode"
+        class="form-control"
+        id="productCode" 
+        placeholder= "Enter Product Code" 
+        name="productCode"
+        #pCode="ngModel" required pattern="^[0-9]*$">
+        <div *ngIf="!pCode.valid && (pCode.touched || pCode.pristine)" class="alert alert-danger">
+          <div *ngIf="pCode.errors.required">
+            Code is required
+          </div>
+          <div *ngIf="pCode.errors.pattern">
+          Please enter Numbers
+        </div>
+        </div>
+      </div>
+    </div>
+    <div class="form-group">        
+      <div class="col-sm-offset-2 col-sm-10">
+        <div class="checkbox">
+          <label><input type="checkbox" [(ngModel)]="product.isAvailable" name="isAvailable" #availability> Available</label>
+        </div>
+      </div>
+    </div>
+    
+    <div class="form-group">
+      <label class="control-label col-sm-2" for="sel1">Quantity:</label>
+        <div class="col-sm-10">
+              <select class="form-control" [(ngModel)]="product.quantity" id="pQuantity" name="pQuantity" #pQuantity="ngModel" required>
+                <option *ngFor="let q of QuantityList" [ngValue]="q">{{q}}</option>
+              </select>
+         <div *ngIf="pQuantity.touched && (!pQuantity.dirty || !pQuantity.valid)" class="alert alert-danger">
+        Quantity is required.
+      </div>
+    </div>
+    </div>
+    <div class="form-group">        
+      <div class="col-sm-offset-2 col-sm-10">
+        <button type="submit" class="btn btn-default" [disabled]="form1.invalid">Submit</button>
+      </div>
+    </div>
+    </div>
+  </form>
+
+<!-- displaying the product details -->
+
+<div class="container" *ngIf="displayDetail">
+  <h2>Product Details</h2>
+<div class="panel panel-primary" *ngFor="let p of ProductList">
+    <div class="panel-heading">
+      <h3 class="panel-title">
+        <!-- Product name -->
+        {{ p.productName }}
+      </h3>
+    </div>
+    <div class="panel-body">
+        <!-- Product code -->
+       {{ p.productCode }}
+    </div>
+    <ul class="list-group">
+      <li class="list-group-item">
+        Availabile
+        <span class="label" [ngClass]="{ 'label-success': p.isAvailable, 'label-warning': !p.isAvailable}">
+          <!-- Product availability -->
+          {{ p.isAvailable ? "Yes" : "No" }}
+        </span>
+      </li>
+      <li class="list-group-item">
+        <!-- Product price -->
+        Quantity: {{ p.quantity }}
+      </li>
+    </ul>
+  </div>
+  </div>
+  </div>
